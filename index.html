@@ -125,7 +125,7 @@
             padding: 2.5rem;
             border-radius: 16px;
             width: 90%;
-            max-width: 450px;
+            max-width: 480px;
             position: relative;
             box-shadow: 0 0 40px rgba(0, 242, 254, 0.15);
             transform: scale(0.9);
@@ -188,6 +188,11 @@
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%238ca3b1'><polygon points='0,0 10,0 5,5'/></svg>");
             background-repeat: no-repeat;
             background-position: right 1rem center;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
         }
 
         /* Form Buttons */
@@ -271,6 +276,11 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label for="botStyle">Bot Style & Functionality Description</label>
+                    <textarea id="botStyle" class="form-control" placeholder="Describe the style (e.g., futuristic, economy, moderation) and features you need..." required></textarea>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" id="closeModalBtn">Cancel</button>
                     <button type="submit" class="btn-submit" id="submitBtn">Submit Request</button>
@@ -316,6 +326,7 @@
             const name = document.getElementById('clientName').value;
             const contact = document.getElementById('clientContact').value;
             const language = document.getElementById('botLanguage').value;
+            const style = document.getElementById('botStyle').value;
 
             // Change button state to visual loading text
             submitBtn.textContent = "Sending...";
@@ -329,7 +340,8 @@
                     fields: [
                         { name: "👤 Client Name", value: name, inline: true },
                         { name: "📞 Contact Info", value: contact, inline: true },
-                        { name: "💻 Target Language", value: language.toUpperCase(), inline: true }
+                        { name: "💻 Target Language", value: language.toUpperCase(), inline: true },
+                        { name: "🎨 Style & Requirements Description", value: style, inline: false }
                     ],
                     timestamp: new Date().toISOString(),
                     footer: { text: "TURBOV Solutions System" }
