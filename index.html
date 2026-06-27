@@ -273,7 +273,7 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" id="closeModalBtn">Cancel</button>
-                    <button type="submit" class="btn-submit">Submit Request</button>
+                    <button type="submit" class="btn-submit" id="submitBtn">Submit Request</button>
                 </div>
             </form>
         </div>
@@ -284,6 +284,10 @@
         const openModalBtn = document.getElementById('openModalBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const quoteForm = document.getElementById('quoteForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Webhook configuration
+        const webhookUrl = "https://discord.com/api/webhooks/1520427877177229423/8jVIzxXZ1hVWx4H6n9YMDEDatfjS8zuroOIPEcMNG1OYJOAU5DzxaurCAnVMlwiqUkAu";
 
         // Open Modal
         openModalBtn.addEventListener('click', () => {
@@ -304,20 +308,58 @@
             }
         });
 
-        // Form Submit Handler
+        // Form Submit Handler linked to Discord Webhook
         quoteForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Capture data for later backend integration
+            // Capture form data
             const name = document.getElementById('clientName').value;
             const contact = document.getElementById('clientContact').value;
             const language = document.getElementById('botLanguage').value;
 
-            alert(`Thank you, ${name}! Your quote request for a ${language.toUpperCase()} Discord bot has been simulated successfully.`);
-            
-            // Close form and clear fields
-            modalOverlay.classList.remove('active');
-            quoteForm.reset();
+            // Change button state to visual loading text
+            submitBtn.textContent = "Sending...";
+            submitBtn.disabled = true;
+
+            // Construct neat embed object matching logo colors (Teal Hex #00f2fe -> Int 62206)
+            const payload = {
+                embeds: [{
+                    title: "🚀 New Discord Bot Quote Request",
+                    color: 62206, 
+                    fields: [
+                        { name: "👤 Client Name", value: name, inline: true },
+                        { name: "📞 Contact Info", value: contact, inline: true },
+                        { name: "💻 Target Language", value: language.toUpperCase(), inline: true }
+                    ],
+                    timestamp: new Date().toISOString(),
+                    footer: { text: "TURBOV Solutions System" }
+                }]
+            };
+
+            // Post to Discord Webhook Endpoint
+            fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`Thank you, ${name}! Your quotation request has been sent successfully.`);
+                } else {
+                    alert("There was an issue sending your request. Please try again later.");
+                }
+            })
+            .catch(error => {
+                console.error("Error sending webhook:", error);
+                alert("An error occurred. Check network logs.");
+            })
+            .finally(() => {
+                // Restore form interface state
+                submitBtn.textContent = "Submit Request";
+                submitBtn.disabled = false;
+                modalOverlay.classList.remove('active');
+                quoteForm.reset();
+            });
         });
     </script>
 
