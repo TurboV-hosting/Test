@@ -431,7 +431,7 @@
             }
         });
 
-        // 3. Handle Form Submission
+        // 3. Handle Form Submission & Webhook integration
         reviewForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -444,6 +444,7 @@
             submitBtn.disabled = true;
 
             try {
+                // Save to Firestore
                 await db.collection("reviews").add({
                     name: name,
                     email: email,
@@ -452,11 +453,27 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
+                // Send Notification to Discord Webhook
+                const webhookUrl = "https://discord.com/api/webhooks/1520440953381326998/LdhRBENtDaMk9o5NvMxJb40srqMzwDMlNc1PW14Bi9UY24_ruqfkrb1KGa27k5gI4l8f";
+                const starString = "⭐".repeat(rating);
+                
+                const discordPayload = {
+                    content: `📝 **New Customer Review Submitted!**\n\n**Name:** ${name}\n**Rating:** ${starString} (${rating}/5)\n\n**Written Review:**\n\`\`\`\n${message}\n\`\`\``
+                };
+
+                await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(discordPayload)
+                });
+
                 modalOverlay.classList.remove('active');
                 reviewForm.reset();
                 alert("Thank you for your review!");
             } catch (error) {
-                console.error("Error adding document: ", error);
+                console.error("Error processing request: ", error);
                 alert("There was an error posting your review. Check the console.");
             } finally {
                 submitBtn.textContent = "Post Review";
