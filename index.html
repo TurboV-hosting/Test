@@ -26,7 +26,7 @@
         /* Color Palette & Base Styles */
         :root {
             --bg-dark: #0b141a;
-            --card-bg: #13222c;
+            --card-bg: rgba(19, 34, 44, 0.9); /* Slight transparency to show background */
             --primary-teal: #00f2fe;
             --accent-blue: #0072ff;
             --text-light: #e2f1f8;
@@ -45,6 +45,13 @@
         }
 
         body {
+            /* Set background image from background.png */
+            background-image: url('background.png');
+            /* Ensure the background covers the entire screen and scales correctly */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Fixed background during scroll */
+            /* Add a solid background color as a fallback in case image doesn't load */
             background-color: var(--bg-dark);
             color: var(--text-light);
             display: flex;
@@ -511,54 +518,29 @@
         // Webhook configuration
         const webhookUrl = "https://discord.com/api/webhooks/1520427877177229423/8jVIzxXZ1hVWx4H6n9YMDEDatfjS8zuroOIPEcMNG1OYJOAU5DzxaurCAnVMlwiqUkAu";
 
-        // 3. Connect to live Firestore updates for real-time reviews stream
-        db.collection("reviews")
-            .orderBy("timestamp", "desc")
-            .limit(5) // Keeps layout fast and minimalist
-            .onSnapshot((snapshot) => {
-                reviewsContainer.innerHTML = ""; 
-                
-                if (snapshot.empty) {
-                    reviewsContainer.innerHTML = `<p style="text-align: center; width: 100%; color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0;">No verified reviews to display yet.</p>`;
-                    return;
-                }
+        // Empty data array waiting for your external database connection or manual injection loop.
+        const dynamicReviews = [];
 
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    
-                    // Fallback to 5 if rating property somehow misses field initialization
-                    const rating = data.rating || 5;
-                    const starString = "⭐".repeat(rating);
-                    
-                    const item = document.createElement('div');
-                    item.className = 'review-item';
-                    item.innerHTML = `
-                        <div class="review-header">
-                            <span class="reviewer-name">@${escapeHTML(data.name)}</span>
-                            <span class="review-stars">${starString}</span>
-                        </div>
-                        <p class="review-text">"${escapeHTML(data.message)}"</p>
-                    `;
-                    reviewsContainer.appendChild(item);
-                });
-            }, (error) => {
-                console.error("Error fetching live database values: ", error);
-                reviewsContainer.innerHTML = `<p style="text-align: center; width: 100%; color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0;">Error loading live database updates.</p>`;
-            });
-
-        // Anti-XSS Sanitizer Injection block helper
-        function escapeHTML(str) {
-            if(!str) return "";
-            return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag])
-            );
+        // Function to render layout blocks cleanly horizontally on the page
+        function displayLiveReviews(reviews) {
+            if(!reviews || reviews.length === 0) {
+                reviewsContainer.innerHTML = `<p style="text-align: center; width: 100%; color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0;">No verified reviews to display yet.</p>`;
+                return;
+            }
+            
+            reviewsContainer.innerHTML = reviews.map(rev => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">@${escapeHTML(rev.name)}</span>
+                        <span class="review-stars">${"★".repeat(rev.stars)}${"☆".repeat(5 - rev.stars)}</span>
+                    </div>
+                    <p class="review-text">"${escapeHTML(rev.text)}"</p>
+                </div>
+            `).join('');
         }
+
+        // Initialize display immediately
+        displayLiveReviews(dynamicReviews);
 
         // Open Modal
         openModalBtn.addEventListener('click', () => {
