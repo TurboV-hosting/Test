@@ -159,9 +159,9 @@
             box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
         }
 
-        /* Live Reviews Section Component */
+        /* Horizontal Reviews Section Component */
         .reviews-card {
-            padding: 2rem;
+            padding: 2rem 1.5rem;
             text-align: left;
         }
         
@@ -172,20 +172,44 @@
 
         .reviews-container {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            flex-direction: row;
+            gap: 1.25rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+
+        /* Custom Scrollbar Styles for Webkit */
+        .reviews-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .reviews-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .reviews-container::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 10px;
+        }
+        .reviews-container::-webkit-scrollbar-thumb:hover {
+            background-color: var(--text-muted);
         }
 
         .review-item {
+            flex: 0 0 280px;
+            scroll-snap-align: start;
             background: rgba(11, 20, 26, 0.4);
             border: 1px solid rgba(30, 53, 69, 0.6);
             padding: 1.2rem;
             border-radius: 10px;
-            transition: transform 0.2s ease;
+            transition: border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .review-item:hover {
-            transform: scale(1.01);
             border-color: rgba(0, 242, 254, 0.3);
         }
 
@@ -409,7 +433,9 @@
         <div class="reviews-card">
             <h2>Recent Client Reviews</h2>
             <div class="reviews-container" id="liveReviewsContainer">
-                <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Loading live reviews...</p>
+                <p style="text-align: center; width: 100%; color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0;">
+                    Loading live reviews...
+                </p>
             </div>
         </div>
 
@@ -469,16 +495,13 @@
         // Webhook configuration
         const webhookUrl = "https://discord.com/api/webhooks/1520427877177229423/8jVIzxXZ1hVWx4H6n9YMDEDatfjS8zuroOIPEcMNG1OYJOAU5DzxaurCAnVMlwiqUkAu";
 
-        // Sample static data array (Replace with API fetch call if hooking up an external backend database)
-        const sampleReviews = [
-            { name: "AlphaOps_Lead", stars: 5, text: "Unbelievable delivery speed. The custom moderation logging system works perfectly with zero delay." },
-            { name: "HorizonHosting", stars: 5, text: "Top tier architecture. Optimized perfectly and custom commands are robust. Will definitely request quotes for future backend systems." }
-        ];
+        // Empty data array waiting for your external database connection or manual injection loop.
+        const dynamicReviews = [];
 
-        // Function to render reviews cleanly on home screen
+        // Function to render layout blocks cleanly horizontally on the page
         function displayLiveReviews(reviews) {
             if(!reviews || reviews.length === 0) {
-                reviewsContainer.innerHTML = `<p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">No reviews posted yet.</p>`;
+                reviewsContainer.innerHTML = `<p style="text-align: center; width: 100%; color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0;">No verified reviews to display yet.</p>`;
                 return;
             }
             
@@ -493,8 +516,8 @@
             `).join('');
         }
 
-        // Initialize display immediately
-        displayLiveReviews(sampleReviews);
+        // Run rendering logic on startup
+        displayLiveReviews(dynamicReviews);
 
         // Open Modal
         openModalBtn.addEventListener('click', () => {
