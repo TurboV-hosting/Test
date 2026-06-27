@@ -20,6 +20,7 @@
             --text-muted: #8ca3b1;
             --border-color: #1e3545;
             --star-color: #ffd700;
+            --warning-red: #ff4a4a;
         }
 
         * {
@@ -232,6 +233,19 @@
             font-size: 0.9rem;
         }
 
+        /* Notice Box Style */
+        .modal-notice {
+            background-color: rgba(255, 74, 74, 0.1);
+            border: 1px solid var(--warning-red);
+            color: #ff9d9d;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            line-height: 1.4;
+        }
+
         /* Form Controls */
         .form-group {
             margin-bottom: 1.25rem;
@@ -339,6 +353,9 @@
             <div class="modal-header">
                 <h3>Leave a Review</h3>
                 <p>Share your experience with our services.</p>
+                <div class="modal-notice">
+                    ⚠️ Leaving False Reviews will Result in your review getting deleted.
+                </div>
             </div>
             
             <form id="reviewForm">
@@ -419,7 +436,7 @@
             e.preventDefault();
             
             const name = document.getElementById('reviewerName').value;
-            const email = document.getElementById('reviewerEmail').value; // Grab Email Value
+            const email = document.getElementById('reviewerEmail').value;
             const rating = parseInt(document.getElementById('reviewRating').value);
             const message = document.getElementById('reviewMessage').value;
 
@@ -427,10 +444,9 @@
             submitBtn.disabled = true;
 
             try {
-                // Add document to the "reviews" collection with the email field included
                 await db.collection("reviews").add({
                     name: name,
-                    email: email, // Saved securely in database
+                    email: email,
                     rating: rating,
                     message: message,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -452,7 +468,7 @@
         db.collection("reviews")
             .orderBy("timestamp", "desc")
             .onSnapshot((snapshot) => {
-                reviewsContainer.innerHTML = ""; // Clear existing 
+                reviewsContainer.innerHTML = ""; 
                 
                 if (snapshot.empty) {
                     reviewsContainer.innerHTML = `<div class="empty-state">No reviews yet. Be the first to leave one!</div>`;
@@ -462,17 +478,14 @@
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     
-                    // Generate Star String
                     const starString = "⭐".repeat(data.rating || 5);
                     
-                    // Format Date securely
                     let dateString = "Just now";
                     if (data.timestamp) {
                         const date = data.timestamp.toDate();
                         dateString = date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
                     }
 
-                    // Build Card HTML (Notice data.email is completely left out here)
                     const card = document.createElement('div');
                     card.className = 'review-card';
                     card.innerHTML = `
