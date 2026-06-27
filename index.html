@@ -17,7 +17,9 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="dev.jpg">
     <meta property="og:site_name" content="TurboV">
-    <meta name="theme-color" content="#00f2fe"> <style>
+    <meta name="theme-color" content="#00f2fe"> 
+    
+    <style>
         /* Color Palette & Base Styles */
         :root {
             --bg-dark: #0b141a;
@@ -27,6 +29,8 @@
             --text-light: #e2f1f8;
             --text-muted: #8ca3b1;
             --border-color: #1e3545;
+            --discord-blurple: #5865F2;
+            --discord-blurple-hover: #4752C4;
         }
 
         * {
@@ -93,10 +97,12 @@
             gap: 1rem;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column; /* Stack buttons vertically */
         }
 
         .btn-quote {
+            width: 100%; /* Make button fill horizontal space evenly */
+            max-width: 280px;
             padding: 1rem 2rem;
             font-size: 1.1rem;
             font-weight: 600;
@@ -116,6 +122,35 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
             background: linear-gradient(135deg, var(--primary-teal), var(--accent-blue));
+        }
+
+        /* Discord Button Specific Styling */
+        .btn-discord {
+            width: 100%;
+            max-width: 280px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            background-color: var(--discord-blurple);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-discord:hover {
+            transform: translateY(-2px);
+            background-color: var(--discord-blurple-hover);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
         }
 
         /* Bottom Footer Area */
@@ -298,6 +333,9 @@
             <h2>Discord Development Services</h2>
             <div class="cta-buttons">
                 <button class="btn-quote" id="openModalBtn">Get a Quotation</button>
+                <a href="https://discord.gg/ENyAAXtN3Z" target="_blank" rel="noopener noreferrer" class="btn-discord">
+                    Join Our Discord
+                </a>
             </div>
         </div>
 
