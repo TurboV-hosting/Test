@@ -453,12 +453,36 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                // Send Notification to Discord Webhook
+                // Send Notification to Discord Webhook as a Rich Embed
                 const webhookUrl = "https://discord.com/api/webhooks/1520440953381326998/LdhRBENtDaMk9o5NvMxJb40srqMzwDMlNc1PW14Bi9UY24_ruqfkrb1KGa27k5gI4l8f";
                 const starString = "⭐".repeat(rating);
                 
                 const discordPayload = {
-                    content: `📝 **New Customer Review Submitted!**\n\n**Name:** ${name}\n**Rating:** ${starString} (${rating}/5)\n\n**Written Review:**\n\`\`\`\n${message}\n\`\`\``
+                    embeds: [{
+                        title: "📝 New Customer Review Submitted!",
+                        color: 62206, // Numeric conversion for your primary teal theme #00f2fe
+                        fields: [
+                            {
+                                name: "👤 Name",
+                                value: name,
+                                inline: true
+                            },
+                            {
+                                name: "⭐ Rating",
+                                value: `${starString} (${rating}/5)`,
+                                inline: true
+                            },
+                            {
+                                name: "💬 Written Review",
+                                value: message,
+                                inline: false
+                            }
+                        ],
+                        timestamp: new Date().toISOString(),
+                        footer: {
+                            text: "Turbov Review Logs Tracker"
+                        }
+                    }]
                 };
 
                 await fetch(webhookUrl, {
