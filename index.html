@@ -84,7 +84,7 @@
             flex-wrap: wrap;
         }
 
-        .btn-quote, .btn-reviews {
+        .btn-quote {
             padding: 1rem 2rem;
             font-size: 1.1rem;
             font-weight: 600;
@@ -93,15 +93,11 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-quote {
             background: linear-gradient(135deg, #00c6ff, #0072ff);
             color: #ffffff;
             border: none;
             box-shadow: 0 4px 15px rgba(0, 198, 255, 0.3);
+            display: inline-block;
         }
 
         .btn-quote:hover {
@@ -110,11 +106,26 @@
             background: linear-gradient(135deg, var(--primary-teal), var(--accent-blue));
         }
 
+        /* Bottom Footer Area */
+        .footer-nav {
+            margin-top: 3rem;
+        }
+
         /* Reviews Button Styling */
         .btn-reviews {
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
+            display: inline-block;
         }
 
         .btn-reviews:hover {
@@ -275,8 +286,11 @@
             <h2>Discord Development Services</h2>
             <div class="cta-buttons">
                 <button class="btn-quote" id="openModalBtn">Get a Quotation</button>
-                <a href="/reviews" class="btn-reviews">Reviews</a>
             </div>
+        </div>
+
+        <div class="footer-nav">
+            <a href="/reviews" class="btn-reviews">Reviews</a>
         </div>
     </div>
 
