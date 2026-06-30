@@ -189,7 +189,17 @@
             font-size: 1.2rem;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-image {
+            width: 100%;
+            max-width: 380px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .product-desc {
@@ -590,6 +600,7 @@
             
             <div class="product-item">
                 <div class="product-name">Clone Hero To VRChat OSC</div>
+                <img src="Clonehero.png" alt="Clone Hero to VRChat OSC Showcase" class="product-image">
                 <div class="product-desc">Stream and sync your live performance data directly into your VRChat chatbox or avatar display seamlessly via OSC network protocols.</div>
                 <div class="product-price" id="productPrice">A$1.99</div>
                 <button class="btn-buy" id="buyProductBtn">Purchase Now</button>
@@ -713,8 +724,8 @@
         const basePriceAUD = 1.99;
         const exchangeRates = {
             AUD: { rate: 1.00, symbol: "A$" },
-            USD: { rate: 0.67, symbol: "$" },
-            CAD: { rate: 0.91, symbol: "C$" }
+            USD: { rate: 0.6884, symbol: "$" },  // 1.99 * 0.6884 = 1.37 USD
+            CAD: { rate: 0.9799, symbol: "C$" }   // 1.99 * 0.9799 = 1.95 CAD
         };
 
         const currencySelect = document.getElementById('currencySelect');
