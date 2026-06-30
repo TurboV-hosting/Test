@@ -118,12 +118,37 @@
             border: none;
             box-shadow: 0 4px 15px rgba(0, 198, 255, 0.3);
             display: inline-block;
+            margin-bottom: 1rem;
         }
 
         .btn-buy:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
             background: linear-gradient(135deg, var(--primary-teal), var(--accent-blue));
+        }
+
+        /* Return Home Button Style */
+        .btn-home {
+            width: 100%;
+            max-width: 280px;
+            padding: 0.8rem 2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            display: inline-block;
+        }
+
+        .btn-home:hover {
+            border-color: var(--primary-teal);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
         }
 
         /* Shop Specific Layout Elements */
@@ -229,6 +254,8 @@
                 <div class="product-desc">Stream and sync your live performance data directly into your VRChat chatbox or avatar display seamlessly via OSC network protocols.</div>
                 <div class="product-price" id="productPrice">A$1.99</div>
                 <button class="btn-buy" id="buyProductBtn">Purchase Now</button>
+                <br>
+                <button class="btn-home" id="returnHomeBtn">Return to home</button>
             </div>
         </div>
     </div>
@@ -258,6 +285,7 @@
         const currencySelect = document.getElementById('currencySelect');
         const productPrice = document.getElementById('productPrice');
         const buyProductBtn = document.getElementById('buyProductBtn');
+        const returnHomeBtn = document.getElementById('returnHomeBtn');
 
         // Handles dynamic price conversions
         function updatePrice() {
@@ -272,6 +300,11 @@
         // Redirects straight to the new invite link
         buyProductBtn.addEventListener('click', () => {
             window.location.href = "https://discord.gg/fcnTvy9qJ";
+        });
+
+        // Redirects to home domain
+        returnHomeBtn.addEventListener('click', () => {
+            window.location.href = "https://turbov.dev";
         });
     </script>
 
